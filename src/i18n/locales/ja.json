@@ -1276,6 +1276,8 @@
     "upstreamFormatChat": "Chat Completions（ルーティング必須）",
     "upstreamFormatResponses": "Responses（ネイティブ）",
     "upstreamFormatAnthropic": "Anthropic Messages（ルーティング必須）",
+    "imageGenerationFilterLabel": "画像生成互換フィルター",
+    "imageGenerationFilterHint": "有効にすると、ローカルルーティングは第三者 Responses リクエストを送信する前に image_generation、image_gen、imagegen のツール宣言を削除します。Codex のルーティング引き継ぎ中のみ適用されます。",
     "anthropicAuthFieldLabel": "認証フィールド",
     "anthropicAuthFieldAuthToken": "ANTHROPIC_AUTH_TOKEN（Authorization）",
     "anthropicAuthFieldApiKey": "ANTHROPIC_API_KEY（x-api-key）",

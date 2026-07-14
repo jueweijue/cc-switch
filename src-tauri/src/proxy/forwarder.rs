@@ -1515,6 +1515,37 @@ impl RequestForwarder {
             self.apply_media_prevention(&mut request_body, provider);
         }
 
+        // Some third-party Responses gateways reject the entire request when
+        // Codex advertises image-generation capabilities that the account is
+        // not allowed to use. This is provider-controlled because removing a
+        // capability should always be explicit and visible in the UI.
+        if matches!(app_type, AppType::Codex)
+            && !codex_official_auth_passthrough
+            && !codex_responses_to_chat
+            && !codex_responses_to_anthropic
+            && super::image_generation_sanitizer::is_responses_endpoint(endpoint)
+            && provider
+                .meta
+                .as_ref()
+                .and_then(|meta| meta.codex_image_generation_filter)
+                == Some(true)
+        {
+            let (sanitized, removed) =
+                super::image_generation_sanitizer::strip_image_generation_items(request_body);
+            request_body = sanitized;
+            if removed > 0 {
+                log::info!(
+                    "[Codex Image Filter] provider={} removed {removed} image-generation item(s) from Responses request",
+                    provider.name
+                );
+            } else {
+                log::debug!(
+                    "[Codex Image Filter] provider={} enabled; no matching image-generation items found",
+                    provider.name
+                );
+            }
+        }
+
         // 过滤私有参数（以 `_` 开头的字段），防止内部信息泄露到上游
         // 默认使用空白名单，过滤所有 _ 前缀字段
         let mut filtered_body = prepare_upstream_request_body(request_body);

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CC Switch Codex Proxy",
+  "identifier": "com.ccswitch.codexproxy",
+  "build": {
+    "beforeBuildCommand": "npm run build:renderer"
+  },
+  "bundle": {
+    "createUpdaterArtifacts": false
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["ccswitch-codex-proxy"]
+      }
+    },
+    "updater": {
+      "endpoints": []
+    }
+  }
+}
