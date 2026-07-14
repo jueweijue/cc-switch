@@ -69,7 +69,20 @@ fn should_drop_object(value: &Value) -> bool {
     object
         .get("name")
         .and_then(Value::as_str)
-        .is_some_and(|name| name.to_ascii_lowercase().contains("image_generation"))
+        .is_some_and(is_image_generation_name)
+}
+
+fn is_image_generation_name(name: &str) -> bool {
+    let normalized: String = name
+        .chars()
+        .filter(|ch| ch.is_ascii_alphanumeric())
+        .flat_map(char::to_lowercase)
+        .collect();
+
+    // Recent Codex Desktop builds advertise image generation as an `image_gen`
+    // namespace containing an `imagegen` function. Older builds used names such
+    // as `image_generation` and `internal_image_generation_preview`.
+    normalized == "imagegen" || normalized.contains("imagegeneration")
 }
 
 #[cfg(test)]
@@ -124,5 +137,28 @@ mod tests {
 
         assert_eq!(removed, 0);
         assert_eq!(output, input);
+    }
+
+    #[test]
+    fn removes_current_codex_image_gen_namespace_and_function() {
+        let input = json!({
+            "tools": [
+                {
+                    "type": "namespace",
+                    "name": "image_gen",
+                    "tools": [{"type": "function", "name": "imagegen"}]
+                },
+                {"type": "function", "name": "imageGen"},
+                {"type": "function", "name": "generate_image_caption"}
+            ]
+        });
+
+        let (output, removed) = strip_image_generation_items(input);
+
+        assert_eq!(removed, 2);
+        assert_eq!(
+            output["tools"],
+            json!([{"type": "function", "name": "generate_image_caption"}])
+        );
     }
 }

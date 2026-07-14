@@ -18,7 +18,8 @@
 删除规则与 `BINGWU2003/codex-proxy` 的行为一致：
 
 - `type` 是 `image_generation`、`image_generation_call` 或 `image_generation_preview`；
-- `name` 不区分大小写且包含 `image_generation`。
+- `name` 不区分大小写且包含 `image_generation`；
+- 当前 Codex Desktop 使用的 `image_gen` namespace 或 `imagegen` 函数。
 
 其他工具（例如 `apply_patch`）、图片输入和官方 OpenAI 请求保持不变。
 
