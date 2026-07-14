@@ -1253,6 +1253,8 @@
     "upstreamFormatChat": "Chat Completions（需開啟路由）",
     "upstreamFormatResponses": "Responses（原生）",
     "upstreamFormatAnthropic": "Anthropic Messages（需開啟路由）",
+    "imageGenerationFilterLabel": "生圖相容過濾",
+    "imageGenerationFilterHint": "開啟後，本機路由會在傳送第三方 Responses 請求前移除 image_generation、image_gen 和 imagegen 工具宣告。僅在 Codex 路由接管中生效。",
     "anthropicAuthFieldLabel": "認證欄位",
     "anthropicAuthFieldAuthToken": "ANTHROPIC_AUTH_TOKEN（Authorization）",
     "anthropicAuthFieldApiKey": "ANTHROPIC_API_KEY（x-api-key）",

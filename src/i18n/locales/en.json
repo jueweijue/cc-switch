@@ -1276,6 +1276,8 @@
     "upstreamFormatChat": "Chat Completions (routing required)",
     "upstreamFormatResponses": "Responses (native)",
     "upstreamFormatAnthropic": "Anthropic Messages (routing required)",
+    "imageGenerationFilterLabel": "Image-generation compatibility filter",
+    "imageGenerationFilterHint": "When enabled, local routing removes image_generation, image_gen, and imagegen tool declarations before sending third-party Responses requests. Only applies during Codex routing takeover.",
     "anthropicAuthFieldLabel": "Auth field",
     "anthropicAuthFieldAuthToken": "ANTHROPIC_AUTH_TOKEN (Authorization)",
     "anthropicAuthFieldApiKey": "ANTHROPIC_API_KEY (x-api-key)",

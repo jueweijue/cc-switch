@@ -464,6 +464,13 @@ pub struct ProviderMeta {
     /// Codex OAuth FAST mode: inject `service_tier = "priority"` for ChatGPT Codex requests.
     #[serde(rename = "codexFastMode", skip_serializing_if = "Option::is_none")]
     pub codex_fast_mode: Option<bool>,
+    /// Remove image-generation tool declarations before forwarding a native
+    /// Responses request to this third-party Codex provider.
+    #[serde(
+        rename = "codexImageGenerationFilter",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub codex_image_generation_filter: Option<bool>,
     /// Codex Responses -> Chat Completions reasoning capability metadata.
     #[serde(rename = "codexChatReasoning", skip_serializing_if = "Option::is_none")]
     pub codex_chat_reasoning: Option<CodexChatReasoningConfig>,

@@ -359,6 +359,9 @@ function ProviderFormFull({
     });
     setCodexChatReasoning(initialData?.meta?.codexChatReasoning ?? {});
     setPromptCacheRouting(initialData?.meta?.promptCacheRouting ?? "auto");
+    setLocalCodexImageGenerationFilter(
+      initialData?.meta?.codexImageGenerationFilter === true,
+    );
     setCustomUserAgent(initialData?.meta?.customUserAgent ?? "");
     setLocalProxyHeadersOverride(
       formatRequestOverrideObject(
@@ -586,6 +589,8 @@ function ProviderFormFull({
 
   const [localCodexApiFormat, setLocalCodexApiFormat] =
     useState<CodexApiFormat>(initialCodexApiFormat);
+  const [localCodexImageGenerationFilter, setLocalCodexImageGenerationFilter] =
+    useState<boolean>(initialData?.meta?.codexImageGenerationFilter === true);
 
   // Auth-field choice for the Anthropic Messages upstream (defaults to the Bearer form)
   const initialCodexAnthropicAuthField: ClaudeApiKeyField =
@@ -1486,6 +1491,13 @@ function ProviderFormFull({
           ? selectedGitHubAccountId
           : undefined,
       codexFastMode: isCodexOauthProvider ? codexFastMode : undefined,
+      codexImageGenerationFilter:
+        appId === "codex" &&
+        category !== "official" &&
+        localCodexApiFormat === "openai_responses" &&
+        localCodexImageGenerationFilter
+          ? true
+          : undefined,
       codexChatReasoning:
         appId === "codex" &&
         category !== "official" &&
@@ -1666,6 +1678,7 @@ function ProviderFormFull({
         resetCodexConfig(template.auth, template.config);
         setCodexChatReasoning({});
         setPromptCacheRouting("auto");
+        setLocalCodexImageGenerationFilter(false);
         setLocalCodexApiFormat(
           codexApiFormatFromWireApi(extractCodexWireApi(template.config)) ??
             "openai_responses",
@@ -1708,6 +1721,7 @@ function ProviderFormFull({
       resetCodexConfig(auth, config, preset.modelCatalog ?? []);
       setCodexChatReasoning(preset.codexChatReasoning ?? {});
       setPromptCacheRouting(preset.promptCacheRouting ?? "auto");
+      setLocalCodexImageGenerationFilter(false);
       setLocalCodexApiFormat(
         preset.apiFormat ??
           codexApiFormatFromWireApi(extractCodexWireApi(config)) ??
@@ -2190,6 +2204,8 @@ function ProviderFormFull({
               onModelChange={handleCodexModelChange}
               apiFormat={localCodexApiFormat}
               onApiFormatChange={handleCodexApiFormatChange}
+              imageGenerationFilter={localCodexImageGenerationFilter}
+              onImageGenerationFilterChange={setLocalCodexImageGenerationFilter}
               anthropicAuthField={localCodexAnthropicAuthField}
               onAnthropicAuthFieldChange={setLocalCodexAnthropicAuthField}
               impersonateClaudeCode={localCodexImpersonateClaudeCode}

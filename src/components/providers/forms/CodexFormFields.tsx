@@ -79,6 +79,8 @@ interface CodexFormFieldsProps {
   // Note: wire_api is always "responses" for Codex; apiFormat controls proxy-layer conversion
   apiFormat: CodexApiFormat;
   onApiFormatChange: (format: CodexApiFormat) => void;
+  imageGenerationFilter: boolean;
+  onImageGenerationFilterChange: (value: boolean) => void;
   // Auth field for the Anthropic Messages upstream (only used when apiFormat === "anthropic")
   anthropicAuthField: ClaudeApiKeyField;
   onAnthropicAuthFieldChange: (value: ClaudeApiKeyField) => void;
@@ -177,6 +179,8 @@ export function CodexFormFields({
   onModelChange,
   apiFormat,
   onApiFormatChange,
+  imageGenerationFilter,
+  onImageGenerationFilterChange,
   anthropicAuthField,
   onAnthropicAuthFieldChange,
   impersonateClaudeCode,
@@ -213,6 +217,7 @@ export function CodexFormFields({
   // 思考能力随 Chat 格式显示（仅 Chat Completions 转换路径用得上）；模型映射常驻
   //（填了才生成 catalog）。两者都已与「路由接管」概念解耦。
   const isChatFormat = apiFormat === "openai_chat";
+  const isResponsesFormat = apiFormat === "openai_responses";
   const isAnthropicFormat = apiFormat === "anthropic";
   const canEditCatalog = Boolean(onCatalogModelsChange);
   const canEditReasoning = Boolean(onCodexChatReasoningChange);
@@ -231,6 +236,7 @@ export function CodexFormFields({
     hasRequestOverrides ||
     catalogModels.length > 0 ||
     apiFormat === "openai_responses" ||
+    imageGenerationFilter ||
     isAnthropicFormat ||
     supportsThinking ||
     supportsEffort ||
@@ -614,6 +620,31 @@ export function CodexFormFields({
                     })}
                   </p>
                 </div>
+
+                {isResponsesFormat && (
+                  <div className="flex items-center justify-between gap-4 border-t border-border-default pt-3">
+                    <div className="space-y-1">
+                      <FormLabel>
+                        {t("codexConfig.imageGenerationFilterLabel", {
+                          defaultValue: "生图兼容过滤",
+                        })}
+                      </FormLabel>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
+                        {t("codexConfig.imageGenerationFilterHint", {
+                          defaultValue:
+                            "开启后，本地路由会在发送第三方 Responses 请求前移除 image_generation、image_gen 和 imagegen 工具声明。仅在 Codex 路由接管中生效。",
+                        })}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={imageGenerationFilter}
+                      onCheckedChange={onImageGenerationFilterChange}
+                      aria-label={t("codexConfig.imageGenerationFilterLabel", {
+                        defaultValue: "生图兼容过滤",
+                      })}
+                    />
+                  </div>
+                )}
 
                 {isAnthropicFormat && (
                   <div className="space-y-1.5">

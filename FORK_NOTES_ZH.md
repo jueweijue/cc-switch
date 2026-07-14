@@ -10,6 +10,7 @@
 
 当以下条件全部满足时，代理会递归删除请求中与 `image_generation` 相关的对象：
 
+- 当前供应商已开启“生图兼容过滤”；
 - 应用类型是 Codex；
 - 请求路径是 `/responses` 或 `/v1/responses`；
 - 上游使用原生 Responses 协议；
@@ -22,6 +23,8 @@
 - 当前 Codex Desktop 使用的 `image_gen` namespace 或 `imagegen` 函数。
 
 其他工具（例如 `apply_patch`）、图片输入和官方 OpenAI 请求保持不变。
+
+开关位置：编辑第三方 Codex 供应商 → 高级选项 → 生图兼容过滤。该开关仅在“Responses（原生）”格式下显示。
 
 ## 构建 macOS 安装包
 
